@@ -1,0 +1,89 @@
+version: "3.6"
+
+services: 
+
+    #Core configuration
+    
+    php-fpm:
+        container_name: ${CONTAINER_NAME}_php-fpm
+        build:
+            context: .
+            target: base
+        ports:
+            - '${PHP_PORT}:9000'
+        volumes:
+            - './:${WORKPATH}:rw'
+            - './docker/php/conf/dev/php.ini:/usr/local/etc/php/php.ini'
+            #- './docker/php/conf/dev/php.ini:/usr/local/etc/php/php.ini'
+        restart: always 
+           
+    nginx:
+        container_name: ${CONTAINER_NAME}_nginx
+        image: nginx
+        ports:
+            - '${NGINX_PORT}:80'
+        volumes:
+            - './:${WORKPATH}:rw'
+            - './docker/nginx/logs:/var/log/nginx'
+            - './docker/nginx/conf/dev/api022020.conf:/etc/nginx/conf.d/default.conf'
+            #- './docker/nginx/conf/dev/api022020.conf:/etc/nginx/conf.d/default.conf'
+            - './docker/nginx/conf/core/nginx.conf:/etc/nginx/nginx.conf'
+        links:
+            - php-fpm
+        restart: always    
+    
+    # Frontend configuration
+    node:
+        container_name: ${CONTAINER_NAME}_node
+        build: './docker/nodejs'
+        ports:
+            - '${NODE_PORT}:3000'
+        entrypoint: "yarn watch"
+        volumes:
+            - './:/usr/src/app:rw'
+        restart: always
+        
+    #DB configuration 
+    # For dev environment coding
+    mysql:
+        container_name: ${CONTAINER_NAME}_mysql
+        image: mysql:5.7
+        ports:
+            - '${MYSQL_PORT}:3306'
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - 'mysql:/var/lib/mysql'
+        restart: always
+        
+    #For prod environment emulation    
+    postgresql:
+        container_name: ${CONTAINER_NAME}_pgsql
+        image: postgres:9.6-alpine
+        environment:
+            PGSQL_DATABASE: ${PGSQL_DATABASE}
+            PGSQL_USER: ${PGSQL_USER}
+            PGSQL_PASSWORD: ${PGSQL_PASSWORD}
+        ports:
+            - '${PGSQL_PORT}:5432'
+        volumes:
+            - 'db-data:/var/lib/postgresql/data:rw'
+        restart: always
+    
+    #Server optimization    
+    redis:
+        container_name: ${CONTAINER_NAME}_redis
+        image: redis:alpine
+        ports:
+            - '${REDIS_PORT}:6379'
+        links:
+            - php-fpm
+        restart: always    
+        
+volumes:
+    db-data: {}
+    mysql:                   
+        

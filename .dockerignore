@@ -1,0 +1,5 @@
+docker/nginx/logs
+
+.gitignore
+
+.env
