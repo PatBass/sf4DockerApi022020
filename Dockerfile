@@ -1,6 +1,6 @@
 FROM php:fpm-alpine as base
 
-ENV WORKPATH "/var/www/api022020"
+ENV WORKPATH "/var/www/sf4DockerApi022020"
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS icu-dev postgresql-dev libzip-dev gnupg graphviz make autoconf git zlib-dev curl chromium go \
