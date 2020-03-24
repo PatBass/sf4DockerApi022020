@@ -1,0 +1,53 @@
+GIT COMMANDS
+
+# Avoid providing email all the time
+
+git config --global user.email "patrickbassoukissa@gmail.com"
+Checking the configuration has been set properly: git config --global user.email or git config --global --list
+
+fork project/repository = make changes without affecting the original project / repo
+1. Go to project and click on "fork" button
+2. If you get error message saying something like "no available..." the click on "Groups" on menu bar above
+3. Click on the group created and then click on "fork" button
+
+4. Once you're done editing the source code, go to gitlab and click on "Merge Request" on the side bar so you can merge the changes into the original copy
+5. Select the desired values in the select elements for the copy and the for the original project
+6. Click on "Compare branches and continue"
+
+HOW TO SETUP SSH KEY (secured shell key)
+- used for authentication
+- By setting ssh key, you can connect to GiLab server without using credentials each time
+
+On Mac, run this command: ssh-keygen
+
+On Windows use putty or git bash
+
+Sign in Gitlab, and go to Account profile > Settings > ssh key, and there copy paste the key from its location
+
+
+GITLAB RUNNER  (https://docs.gitlab.com/runner/install/osx.html)
+- Used in GitLab Runner
+- Used to run jobs and send results back to GitLab
+===> Install gitlab runner: brew install gitlab-runner  / gitlab-runner --version  / brew services start gitlab-runner
+===> register gitlab runner: gitlab-runner register
+For Mac:
+- brew install gitlab-runner
+- gitlab-runner --version
+- brew services start gitlab-runner
+- brew services stop gitlab-runner
+To register: gitlab-runner register  / Provide description (e.g "my-runner") when asked to / Tap "shell" when asked to provide executor
+- brew services start gitlab-runner
+Go to gitlab GUI and check if the runner is activated
+
+ON WINDOWS
+https://docs.gitlab.com/runner/install/windows.html
+
+GITLAB CI
+1. Create .gitlab-ci.yml
+2. Run CI/CD pipeline
+3. Create a .gitlab-ci.yml file
+4. Commit and push the file
+5. Create a GitLab runner for the project
+6. Start the runner
+7. brew services start gitlab-runner (on windows : gitlab-runner.exe start)
+
